@@ -1,0 +1,74 @@
+<html>
+    {% include "header.html" with title="Deliver" vr=vr taskid=task.pk task=task.nombre curso=grade%}
+    <h2 class="pt-5 pl-20 text-4xl">{{grade.nombre}} / {{task.nombre}}</h2>
+    <div id="exercise" class="pl-20 pr-20 pt-5 ">
+        <div class="flex">
+            <div id="previewExercises" class="min-w-[25%] max-w-[25%]">
+                <div class="border-solid rounded border-black bg-[#ededed] p-2 mx-8 mb-3">
+                    <ul>
+                        <li><p class="font-bold text-lg">Tareas de {{grade.nombre}}:</p>
+                            <ul class="pl-8">
+                                {% for t in tasks %}
+                                    {% if t.visibilidad == True%}
+                                        <li>
+                                            • <a class="text-base underline text-[#461f87]" href="../task/{{t.pk}}">{{t.nombre}}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% for t in vrtasks %}
+                                    {% if t.visibilidad == True%}
+                                        <li>
+                                            • <a class="text-base underline text-[#461f87]" href="../vrtask/{{t.pk}}">{{t}}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div id="addFile" class="min-w-[75%] max-w-[75%]">
+                {% if delivery.0 %}
+                    <div class="border-solid rounded border-black bg-[#ededed] p-2 mx-8 mb-3">
+                        <table id="fctable" class="min-w-full">
+                            <tr class="text-center font-bold">
+                                <td><p>Número de entrega</p></td>
+                                <td><p>Fecha de entrega</p></td>
+                                <td><p>Archivo entregado</p></td>
+                            </tr>
+                            {% for d in delivery %}
+                                <tr class="text-center">
+                                    <td>
+                                        <p class="italic">Entrega {{forloop.counter}}</p>
+                                    </td>
+                                    <td>
+                                        <p>{{d.fecha_entrega}}</p>
+                                    </td>
+                                    <td>
+                                        <a class="italic underline text-[#461f87]" href="../../{{d.archivo}}">Descargar</a>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="3">
+                                        <p>• No hay entregas realizadas en esta tarea.</p>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                {% else %}
+                        <div class="border-solid rounded border-black bg-[#ededed] p-2 mx-8 mb-3 flex">
+                            {% load static %}
+                            <img class="max-w-[30px] max-h-[30px] ml-3 mr-8" src="{% static 'warning.png' %}" alt="Warning"><p class="text-xl">No hay entregas realizadas en esta tarea</p>
+                        </div>
+                {% endif %}
+                <div class="border-solid rounded border-black bg-[#ededed] p-2 mx-8 mb-3 flex">
+                    <p class="font-bold pr-5">Realiza tu entrega: </p>
+                    <input type="file">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

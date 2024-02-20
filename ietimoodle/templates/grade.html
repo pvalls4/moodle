@@ -1,0 +1,62 @@
+<html>
+    {% include "header.html" with title="Curso" curso=grade %}
+    <h2 class="pt-5 pl-20 text-4xl">Recursos de {{grade}}</h2>
+    <div id="recursos" class="pl-20 pr-20 pt-5">
+        {% for r in resources %}
+            <div class="border-solid rounded border-black bg-[#ededed] p-2 mx-8 mb-3">
+                <a class="text-2xl underline text-[#461f87]" href="../resource/{{r.pk}}">{{r}}</a>
+                <p class="pl-10 italic">Vista general: {{r.texto}}</p>
+                {% if r.archivo %}
+                    <p class="pl-10 italic underline">1 fichero adjunto</p>
+                {% else %}
+                    <p class="pl-10 italic underline">*No hay ficheros adjuntos</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+    <div id="tituloTareas" class="flex">
+        <h2 class="pt-2 pl-20 text-4xl">Tareas de {{grade}}</h2>
+        {% if role.tipo == "alumno" %}
+            <button class="p-1 mt-2 ml-10 font-bold"><a href="../qualifications/{{grade.pk}}">Cualificaciones de {{grade.nombre}}</a></button>
+        {% endif %}
+    </div>
+    <div id="tareas" class="pl-20 pr-20 pt-5">
+        {% if tasks %}
+            {% for t in tasks %}
+                {% if t.visibilidad == True or role.tipo == "profesor" %}
+                    {% if role.tipo == "profesor"  and t.visibilidad == False %} 
+                        {% load static %}
+                        <p class="pl-10 italic flex"><img class="max-w-[18px] max-h-[18px]" src="{% static 'warning.png' %}" alt="Warning">Tarea oculto para el alumnado</p>
+                    {% endif %}
+                    <div class="border-solid rounded border-black bg-[#ededed] p-2 mx-8 mb-3">
+                        {% if role.tipo == "profesor" %}
+                            <a class="text-2xl underline text-[#461f87]" href="../{{t.pk}}/{{firstal.pk}}">{{t}}</a>
+                        {% else %}
+                            <a class="text-2xl underline text-[#461f87]" href="../task/{{t.pk}}">{{t}}</a>
+                        {% endif %}
+                        <p class="pl-10 italic">Ponderación: {{t.ponderacion}}</p>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        {% if vrtasks %}
+            {% for t in vrtasks %}
+                {% if t.visibilidad == True or role.tipo == "profesor" %}
+                    {% if role.tipo == "profesor"  and t.visibilidad == False %} 
+                        {% load static %}
+                        <p class="pl-10 italic flex"><img class="max-w-[18px] max-h-[18px]" src="{% static 'warning.png' %}" alt="Warning">Tarea oculto para el alumnado</p>
+                    {% endif %}
+                    <div class="border-solid rounded border-black bg-[#ededed] p-2 mx-8 mb-3">
+                        {% if role.tipo == "profesor" %}
+                            <a class="text-2xl underline text-[#461f87]" href="../vr/{{t.pk}}/{{firstal.pk}}">{{t}}</a>
+                        {% else %}
+                            <a class="text-2xl underline text-[#461f87]" href="../vrtask/{{t.pk}}">{{t}}</a>
+                        {% endif %}
+                        <p class="pl-10 italic">Ponderación: {{t.ponderacion}}</p>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+    </body>
+</html>

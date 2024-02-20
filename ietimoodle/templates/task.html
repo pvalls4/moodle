@@ -1,0 +1,116 @@
+<html>
+    {% include "header.html" with title="Task" task=task.nombre cursoid=curso.pk %}
+    <h2 class="pt-5 pl-20 text-4xl">{{curso.nombre}} / {{task.nombre}}</h2>
+    <div id="task" class="pl-20 pr-20 pt-5 ">
+        <div class="flex">
+            <div id="previewTasks" class="min-w-[25%] max-w-[25%]">
+                <div class="border-solid rounded border-black bg-[#ededed] p-2 mx-8 mb-3">
+                    <ul>
+                        <li><p class="font-bold text-lg">Tareas de {{curso.nombre}}:</p>
+                            <ul class="pl-8">
+                                {% for t in tasks %}
+                                    {% if t.visibilidad == True%}
+                                        <li>
+                                            • <a class="text-base underline text-[#461f87]" href="../task/{{t.pk}}">{{t}}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% for t in vrtasks %}
+                                    {% if t.visibilidad == True%}
+                                        <li>
+                                            • <a class="text-base underline text-[#461f87]" href="../vrtask/{{t.pk}}">{{t}}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div id="taskData" class="min-w-[75%] max-w-[75%]">
+                <div id="ponderation" class="border-solid rounded border-black bg-[#ededed] p-2 mx-8 mb-3">
+                    <p class="font-bold">Ponderación: {{task.ponderacion}}</p>
+                </div>
+                <div class="border-solid rounded border-black bg-[#ededed] p-2 mx-8 mb-3">
+                    <table class="w-[100%]">
+                        <tr class="bg-[#e2daf0]">
+                            <td class="min-w-[200px]"><p class="font-bold">Estado de la entrega</p></td>
+                            <td class="min-w-full">
+                                {% if entrega.0 %}
+                                <p class="text-lime-600">Entregado</p>
+                                {% else %}
+                                <p class="text-red-700">No entregado</p>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><p class="font-bold">Calificación</p></td>
+                            <td>
+                                {% if qualification.0.nota %}
+                                <p>{{qualification.0.nota}}</p>
+                                {% else %}
+                                <p class="text-red-700">No calificado</p>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr class="bg-[#e2daf0]">
+                            <td><p class="font-bold">Fecha de entrega</p></td>
+                            <td>
+                                {% if entrega.0.fecha_entrega %}
+                                <p>{{entrega.0.fecha_entrega}}</p>
+                                {% else %}
+                                <p class="text-red-700">No entregado</p>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><p class="font-bold">Comentario del profesor</p></td>
+                            <td>
+                                {% if entrega.0.comentario_profesor and entrega.0.comentario_profesor != "None" %}
+                                    <p>{{entrega.0.comentario_profesor}}</p>
+                                {% else %}
+                                    <p class="italic">Sin comentario</p>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% if entrega.0 %}
+                            <tr class="bg-[#e2daf0]">
+                                <td class="min-w-[200px]"><p class="font-bold">Tu comentario</p></td>
+                                <td class="min-w-full">
+                                    {% if entrega.0.comentario_alumno and entrega.0.comentario_alumno != "None" %}
+                                        <p>{{entrega.0.comentario_alumno}}</p>
+                                    {% else %}
+                                        <p class="italic">Sin comentario</p>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><p class="font-bold">Archivo adjunto</p></td>
+                                <td>
+                                    {% if entrega.0.archivo %}
+                                    <a class="italic underline text-[#461f87]" href="../../{{entrega.0.archivo}}">Descargar archivo entregado</a>
+                                    {% else %}
+                                    <p>Ningún archivo adjunto</p>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr class="bg-[#e2daf0]">
+                                <td colspan="2">
+                                    <button class="ml-[25%] font-bold rounded-lg p-1.5 bg-[#461f87] text-[#ededed]" onclick="location.href='../ad/{{task.pk}}'">Añadir otra entrega</button>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr class="bg-[#e2daf0]">
+                                <td colspan="2">
+                                    <button class="ml-[25%] font-bold rounded-lg p-1.5 bg-[#461f87] text-[#ededed]" onclick="location.href='../ad/{{task.pk}}'">Añadir entrega</button>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </table>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
+</html>

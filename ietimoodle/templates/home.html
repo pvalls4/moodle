@@ -1,0 +1,15 @@
+<html>
+    {% include "header.html" with title="Home" %}
+    <div class="p-20 max-w-2xl max-h-2xl flex flex-col items-center align-center m-auto">
+        {% load static %}
+        <img src="{% static 'logo.png' %}" alt="WLYLogo">
+        <div>
+            {% if not request.user.is_authenticated %}
+                <button class="rounded-lg p-2 bg-[#461f87] text-[#ededed]" onclick="location.href='login'">Log In</button>
+            {% else %}
+                <button class="rounded-lg p-2 bg-[#461f87] text-[#ededed]" onclick="location.href='dashboard'">Dashboard</button>
+            {% endif %}
+        </div>
+    </div>
+    </body>
+</html>

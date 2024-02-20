@@ -1,0 +1,109 @@
+<html>
+    {% include "header.html" with title="Fast Correction" task=task.nombre cursoid=curso.pk %}
+        {% block content %}
+        <h2 class="pt-5 pl-20 text-4xl">{{task.nombre}}</h2>
+
+        <div id="table" class="pl-20 pr-20 pt-5 ">
+            <div class="border-solid rounded border-black bg-[#ededed] p-2 mx-8 mb-3">
+                <table id="fctable" style="border: 1px ; border-radius: 10px;" class="min-w-full">
+                    <tr class="font-bold text-center">
+                        <td>Alumno</td>
+                        <td>Correo</td>
+                        <td>Calificación</td>
+                        <td>Entregas</td>
+                        <td>Comentario Profesor</td>
+                        <td>Actualizar</td>
+                    </tr>
+                    {% if deliveries %}
+                    {% for a in alumnos %}
+                        <tr class="text-center">
+                            <td>{{a.user}}</td>
+                            <td>{{a.user.correo}}</td>
+                            <td class="flex item-center justify-center">
+                                <ol class="list-decimal">
+                                    {% if a.user.pk in alumnosEntregado %}
+                                        {% for d in deliveries %}
+                                            {% if a.user.pk == d.user.pk %}
+                                                <li>
+                                                    <a class="italic underline text-[#461f87]" href="../../{{d.archivo}}">Descargar entrega</a>
+                                                </li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        <p class="italic text-red-700">No hay entregas</p>
+                                    {% endif %}
+                                </ol>    
+                            </td>
+                            <td class="{{a.user.username}}">
+                                <input type="number" id="{{a.user}}" value="0" class="nota" min="0" max="10">
+                                {% for q in qualifications %}
+                                    {% if q.user.pk == a.user.pk %}
+                                        <script>
+                                            var valorNota = '{{q.nota}}'
+                                            $('#{{a.user}}').val(valorNota)
+                                            $('#{{a.user}}').attr('name','{{q.pk}}')
+                                        </script>
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                            <td class="{{a.user.username}}">
+                                <textarea name="comentarioProfesor" id="" cols="30" rows="1" class="comentarioProfesor">{% spaceless %}
+                                    {% for q in qualifications %}
+                                        {% if q.user.pk == a.user.pk %}
+                                            {% if q.comentario_profesor %}
+                                                {{q.comentario_profesor}}
+                                            {% else %}
+                                                Sin comentario
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}{% endspaceless %}</textarea>
+                            </td>
+                            <td><button name="" id="{{a.user.username}}" class="p-1 m-1 text-sm actualizar">Actualizar</button></td>
+                        </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr><td>No hay entregas</td></tr>
+                    {% endif %}
+                </table>    
+                
+            </div>
+        </div>
+        <script>
+            $(document).ready(function() {
+                $('.actualizar').each(function() {
+                    $(this).on('click', function () {
+                        let nota = $("."+this.id+' .nota').val();
+                        let comentarioProfesor = $("."+this.id+' .comentarioProfesor').val();
+                        if (comentarioProfesor=="") {
+                            comentarioProfesor="Sin comentarios"
+                        }
+                        let qualification =  $('#'+this.id).attr('name');
+                        let vr="{{vr}}";
+                        if (vr=='False'){
+                            $.ajax({
+                                url: window.location.origin+"/actualizar/"+qualification+"/"+nota+"/"+comentarioProfesor ,
+                                method : 'POST',
+                            })
+                        }
+                        else{
+                            $.ajax({
+                                url: window.location.origin+"/actualizar/vr/"+qualification+"/"+nota+"/"+comentarioProfesor ,
+                                method : 'POST',
+                            })
+                        }
+
+                        $("table").before('<div class="alert success"> <span class="closebtn">&times;</span>La información se ha actualizado correctamente</div>');
+                        eliminarAlerta();
+                        setTimeout(function(){ location.reload()}, 1000);
+
+                        
+                    })
+                    
+                });
+
+                    });
+            
+        </script>
+        {% endblock %}
+    </body>
+<html>

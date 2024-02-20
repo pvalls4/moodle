@@ -1,0 +1,18 @@
+<html>
+    {% include "header.html" with title="Dashboard" %}
+        <h2 class="pt-5 pl-20 text-4xl">Cursos de {{user.username}}:</h2>
+        <div class="p-20 pt-5">
+        {% for s in suscripciones %}
+            <div class="border-solid rounded border-black bg-[#ededed] p-2 mx-8 ">
+                <a class="text-3xl underline text-[#461f87]" href="../grade/{{s.curso.pk}}">{{s.curso}}</a> 
+                {% for i in cursos %}
+                    {% if i.nombre|stringformat:"s" == s.curso|stringformat:"s" %}
+                    <p class="italic">{{ i.descripcion }}</p>
+                    {% endif %}
+                {% endfor %}
+                <p class="text-lg">Rol asignado: {{s.tipo}}</p>
+            </div>
+        {% endfor %}
+        </div>
+    </body>
+</html>

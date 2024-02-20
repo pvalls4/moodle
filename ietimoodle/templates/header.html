@@ -1,0 +1,98 @@
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-84RC3PPX48"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-84RC3PPX48');
+    </script>
+    <meta name="google-site-verification" content="QlJijYk74BBBPfM_iigsTVLrtRkGftCMeYdJtPrAypU" />
+    {% if title == "Curso" %}
+        <title>{{curso}}</title>
+    {% elif title == "Resource" %}
+        <title>{{resource}}</title>
+    {% elif title == "Task" %}
+        <title>{{task}}</title>
+    {% elif title == "Delivery" %}
+        <title>{{task}}</title>
+    {% elif title == "Qualifications" %}
+        <title>Cualificaciones de {{curso.nombre}}</title>
+    {% elif title == "Deliver" %}
+        <title>Añadir entrega a {{task}}</title>
+    {% else %}
+        <title>{{title}}</title>
+    {% endif %}
+    <script src="https://cdn.tailwindcss.com"></script>
+    {% load static %}
+    <!-- import fuente Roboto -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <!-- import funete Assistant -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@500&family=Roboto:wght@300&display=swap" rel="stylesheet">
+
+    <script
+        src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+        crossorigin="anonymous"></script>
+    <script src="{% static 'funciones.js' %}"></script>
+    
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <header class="pt-5 pb-0 pr-10 pl-10 flex justify-between">
+        <div>
+        <a href=".."><img class="w-20" src="{% static 'logo.png' %}" alt="WLYLogo"></a>
+        {% if title == "Home" %}
+        <a class="underline text-[#461f87]" href="">Home</a>
+        {% elif title == "Dashboard" %}
+        <a class="underline text-[#461f87]" href="..">Home</a> / 
+        <a class="underline text-[#461f87]" href="">Cursos</a>
+        {% elif title == "Delivery" or title == "Fast Correction" %}
+        <a class="underline text-[#461f87]" href="../../">Home</a> / 
+        <a class="underline text-[#461f87]" href="../../dashboard">Cursos</a> /
+        <a class="underline text-[#461f87]" href="../../grade/{{cursoid}}">{{curso}}</a> / 
+        <a class="underline text-[#461f87]" href="">{{task}}</a>
+        {% elif title == "Curso" %}
+        <a class="underline text-[#461f87]" href="../..">Home</a> / 
+        <a class="underline text-[#461f87]" href="../dashboard">Cursos</a> / 
+        <a class="underline text-[#461f87]" href="">{{curso}}</a>
+        {% elif title == "Resource" %}
+        <a class="underline text-[#461f87]" href="..">Home</a> / 
+        <a class="underline text-[#461f87]" href="../dashboard">Cursos</a> / 
+        <a class="underline text-[#461f87]" href="../grade/{{cursoid}}">{{curso}}</a> / 
+        <a class="underline text-[#461f87]" href="">{{resource}}</a>
+        {% elif title == "Task" %}
+        <a class="underline text-[#461f87]" href="..">Home</a> / 
+        <a class="underline text-[#461f87]" href="../dashboard">Cursos</a> /
+        <a class="underline text-[#461f87]" href="../grade/{{cursoid}}">{{curso}}</a> / 
+        <a class="underline text-[#461f87]" href="">{{task}}</a>
+        {% elif title == "Qualifications" %}
+        <a class="underline text-[#461f87]" href="..">Home</a> / 
+        <a class="underline text-[#461f87]" href="../dashboard">Cursos</a> /
+        <a class="underline text-[#461f87]" href="../grade/{{curso.pk}}">{{curso.nombre}}</a> / 
+        <a class="underline text-[#461f87]" href="">Cualificaciones de {{curso.nombre}}</a>
+        {% elif title == "Deliver" %}
+        <a class="underline text-[#461f87]" href="..">Home</a> / 
+        <a class="underline text-[#461f87]" href="../dashboard">Cursos</a> /
+        <a class="underline text-[#461f87]" href="../grade/{{curso.pk}}">{{curso.nombre}}</a> / 
+        {% if vr %}
+            <a class="underline text-[#461f87]" href="../vrtask/{{taskid}}">{{task}}</a> /
+        {% else %}
+            <a class="underline text-[#461f87]" href="../task/{{taskid}}">{{task}}</a> /  
+        {% endif %}
+        <a class="underline text-[#461f87]" href="">Añadir entrega a {{task}}</a>
+        {% endif %}
+        </div>
+        <div>
+            <p class="text-right">{{user.username}}</p>
+            {% if request.user.is_authenticated %}
+                <a class="underline text-[#461f87]" href="{% url 'moodle:logout' %}"><p class="text-right">Logout</p></a>
+            {% endif %}
+        </div>
+    </header>

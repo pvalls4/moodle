@@ -1,0 +1,22 @@
+<html>
+    {% include "header.html" with title="Resource" resource=resource.titulo cursoid=curso.pk %}
+    <h2 class="pt-5 pl-20 text-4xl">{{curso.nombre}} / {{resource.titulo}}</h2>
+    <div id="resource" class="pl-20 pr-20 pt-5 ">
+        <div id="description" class="border-solid rounded border-black bg-[#ededed] p-2 mx-8 mb-3">
+            <p class="font-bold">Descripción:</p>
+            <p class="pl-10">{{resource.texto}}</p>
+        </div>
+        <div id="attachedFiles">
+            <div class="border-solid rounded border-black bg-[#ededed] p-2 mx-8 mb-3">
+                <p class="font-bold">Fichero adjunto:</p>
+                {% if resource.archivo %}
+                    <a class="pl-10 italic underline text-[#461f87]" href="../../{{resource.archivo}}">Descargar recurso</a>
+                {% else %}
+                    {% load static %}
+                    <p class="pl-10 italic flex"><img class="max-w-[18px] max-h-[18px]" src="{% static 'warning.png' %}" alt="Warning">No hay ficheros adjuntos en este recurso.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    </body>
+</html>

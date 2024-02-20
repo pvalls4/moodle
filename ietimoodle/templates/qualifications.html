@@ -1,0 +1,110 @@
+<html>
+    {% include "header.html" with title="Qualifications" curso=grade %}
+        {% block content %}
+        <h2 class="pt-5 pl-20 text-4xl">{{grade.nombre}}</h2>
+        <div id="table" class="pl-20 pr-20 pt-5 ">
+            <div class="border-solid rounded border-black bg-[#ededed] p-2 mx-8 mb-3">
+                <table id="fctable" style="border: 1px ; border-radius: 10px;" class="min-w-full">
+                    <tr class="text-center font-bold">
+                        <td>Tarea</td>
+                        <td>Ponderación</td>
+                        <td>Calificación</td>
+                        <td>Comentario Profesor</td>
+                        <td>Entregas</td>
+                    </tr>
+                    {% for t in tasks %}
+                        {% if t.visibilidad == True %}
+                            <tr class="text-center">
+                                <td>{{t.nombre}}</td>
+                                <td>{{t.ponderacion}}</td>
+                                <td>
+                                {% for q in qualifications %}
+                                    {% if q.0.tarea.pk == t.pk and q.0.user.pk == alumn.pk %}
+                                        {{q.0.nota}}
+                                    {% endif %}
+                                {% endfor %}
+                                </td>
+                                <td>
+                                    {% for q in qualifications %}
+                                        {% if q.0.tarea.pk == t.pk and q.0.user.pk == alumn.pk %}
+                                            {% if q.0.comentario_profesor %}
+                                                {{q.0.comentario_profesor}}
+                                            {% else %}
+                                                <p class="italic">Sin comentario</p>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                                {% if t.pk in deliveriesRealizadas %}
+                                    <td>
+                                        <ol class="list-decimal">
+                                            {% for d in deliveries %}
+                                                {% if d.tarea.pk == t.pk %}
+                                                    {% if d.archivo %}
+                                                        <li><a href="../{{d.archivo}}" class="underline text-[#461f87] italic">Entrega {{forloop.counter}}</a></li>
+                                                    {% else %}
+                                                        <li><p class="italic">Sin archivo</p></li>
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </ol>
+                                    </td>
+                                {% else %}
+                                    <td class="italic text-red-700">No hay entregas</td>
+                                {% endif %}
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    {% for t in vrtasks %}
+                        {% if t.visibilidad == True %}
+                            <tr class="text-center">
+                                <td>{{t.nombre}}</td>
+                                <td>{{t.ponderacion}}</td>
+                                <td>
+                                {% for q in vrqualifications %}
+                                    {% if q.0.tarea.pk == t.pk and q.0.user.pk == alumn.pk %}
+                                        {{q.0.nota}}
+                                    {% endif %}
+                                {% endfor %}
+                                </td>
+                                <td>
+                                    {% for q in vrqualifications.0 %}
+                                        {% if q.0.tarea.pk == t.pk and q.0.user.pk == alumn.pk %}
+                                            {{ q.0.comentario_profesor}}
+                                            {% if q.0.comentario_profesor %}
+                                                {{q.0.comentario_profesor}}
+                                            {% else %}
+                                                <p class="italic">Sin comentario</p>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% empty %}
+                                    <p class="italic">Sin comentario</p>
+                                    {% endfor %}
+                                </td>
+                                {% if t.pk in deliveriesVRRealizadas %}
+                                    <td>
+                                        <ol class="list-decimal">
+                                            {% for d in deliveries %}
+                                                {% if d.vrtarea.pk == t.pk %}
+                                                    {% if d.archivo %}
+                                                        <li><a href="../{{d.archivo}}" class="underline text-[#461f87] italic">Entrega {{forloop.counter}}</a></li>
+                                                    {% else %}
+                                                        <li><p class="italic">Sin archivo</p></li>
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </ol>
+                                    </td>
+                                {% else %}
+                                    <td class="italic text-red-700">No hay entregas</td>
+                                {% endif %}
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+
+        {% endblock %}
+    </body>
+<html>
